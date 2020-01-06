@@ -1,0 +1,4 @@
+- create 3 ec2 instances via terraform
+- provision them with chef
+- create kubernetes cluster using kubeadm
+- deploy an application using helm
