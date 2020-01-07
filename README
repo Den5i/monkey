@@ -2,3 +2,4 @@
 - provision them with chef
 - create kubernetes cluster using kubeadm
 - deploy an application using helm
+- create Jenkins and Jenkinsfile for automated deployment
