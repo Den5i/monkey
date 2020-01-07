@@ -7,3 +7,11 @@ variable "aws_shared_credentials" {
 variable "aws_region" {
   default = "eu-central-1"
 }
+
+variable "instance_type" {
+  default = "t2.micro"
+}
+
+variable "instance_count" {
+  default = 1
+}
