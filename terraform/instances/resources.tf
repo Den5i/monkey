@@ -1,3 +1,8 @@
+resource "aws_key_pair" "instances-key" {
+  key_name   = "rsa"
+  public_key = file("/home/den/rsa.pub")
+}
+
 resource "aws_instance" "node" {
   ami             = "${data.aws_ami.ubuntu.id}"
   instance_type   = "${var.instance_type}"
@@ -85,6 +90,7 @@ resource "template_file" "chef_bootstrap" {
 
 resource "aws_instance" "chef" {
   instance_type          = "${var.instance_type}"
+  key_name               = "rsa"
   ami                    = "${data.aws_ami.ubuntu.id}"
   subnet_id              = "${aws_subnet.default.id}"
   vpc_security_group_ids = ["${aws_security_group.default.id}", "${aws_security_group.default.id}"]
@@ -94,6 +100,13 @@ resource "aws_instance" "chef" {
   }
 
   provisioner "remote-exec" {
+    connection {
+	    type          = "ssh"
+	    user          = "ubuntu"
+	    host          = "${aws_instance.chef.public_ip}"
+	    private_key   = file("/home/den/rsa")
+	 }
+
     inline = [
       "echo '${template_file.chef_bootstrap.rendered}' > /tmp/bootstrap-chef-server.sh",
       "chmod +x /tmp/bootstrap-chef-server.sh",
